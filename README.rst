@@ -129,7 +129,4 @@ If you want to hack, you can TDD with::
 
 The py.test unit tests are in dumbyaml/unittests.
 
-Python_ is `my favourite
-programming language`__.
-
 .. _YAML: comparisons/YAML.rst
