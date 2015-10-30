@@ -1,0 +1,7 @@
+build/
+dist/
+.cache
+dumbyaml.egg-info/
+tests/.hitch
+__pycache__
+*.pyc

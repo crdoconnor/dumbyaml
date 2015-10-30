@@ -1,0 +1,16 @@
+{% for python_version in python_versions %}
+- name: Run py.units in python {{ python_version }}
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - unittest
+    - py{{ python_version }}
+  scenario:
+    - Run unit tests: dumbyaml/unittests/
+{% endfor %}
+
+- name: Run flake8
+  tags:
+    - flake8
+  scenario:
+    - Flake8: dumbyaml
