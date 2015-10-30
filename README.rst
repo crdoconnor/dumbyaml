@@ -10,7 +10,7 @@ inhibit readability.
 * Typing tag tokens (!!bool / !!str / !!float) are explicitly disallowed.
 * Node anchors and references are explicitly disallowed.
 
-See :doc:`/comparisons/YAML` for a more direct comparison with regular YAML.
+See YAML_ for a more direct comparison with regular YAML.
 
 DumbYAML was built for use with the
 `hitch testing framework's <https://hitchtest.com/>`_
@@ -120,7 +120,7 @@ Rules:
 
 Comparisons:
 
-* Regular :doc:`/comparisons/YAML`
+* Regular YAML_
 
 Hacking
 -------
@@ -133,3 +133,8 @@ If you want to hack, you can TDD with::
   hitch test run.test
 
 The py.test unit tests are in dumbyaml/unittests.
+
+Python_ is `my favourite
+programming language`__.
+
+.. _YAML: comparisons/YAML.rst
