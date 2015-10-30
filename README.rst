@@ -36,19 +36,14 @@ Use::
     >>> dumbyaml.load("x: 1\ny: 2")
     {'y': '2', 'x': '1'}
 
-Disallowed features raise YAMLError (the default pyyaml exception)::
+Disallowed features raise an exception inheriting from YAMLError (the default pyyaml exception)::
 
     >>> dumbyaml.load("x: &anchor")
     Traceback (most recent call last):
       raise AnchorTokenDisallowed(token)
     dumbyaml.AnchorTokenDisallowed: AnchorToken(value='anchor')
 
-Then, anywhere where you are using data parsed from YAML into
-a list, dict, list of dicts or dict of lists or whatever,
-you will need to add an *explicit* type conversion in your
-code from the string to your desired type.
-
-E.g::
+You will need to add explicit type conversions in your code. E.g.::
 
     is_it_null = None if yamlresult['isnull'].lower() == "null" else yamlresult['isnull']
     answer_to_question = yamlresult['answer'].lower() in ("yes", "y", "true")
