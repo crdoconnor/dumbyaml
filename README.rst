@@ -70,7 +70,7 @@ As Tim Berners Lee said::
     were as powerful as possible. Nowadays we have to appreciate the reasons
     for picking not the most powerful solution but the least powerful.
 
-And, as Guido van Rossum said::
+And, as Tim Peters said in the Zen of Python::
 
     Beautiful is better than ugly.
     Explicit is better than implicit.
