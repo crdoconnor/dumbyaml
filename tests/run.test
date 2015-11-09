@@ -1,12 +1,96 @@
 {% for python_version in python_versions %}
-- name: Run py.units in python {{ python_version }}
+- name: No implicit numbers
   preconditions:
     python_version: {{ python_version }}
   tags:
-    - unittest
+    - no-implicit
+    - numbers
     - py{{ python_version }}
   scenario:
-    - Run unit tests: dumbyaml/unittests/
+    - Assert true: "dumbyaml.load('x: 3.5') == {'x': '3.5', }"
+    - Assert true: "dumbyaml.load('x: +3.5') == {'x': '+3.5', }"
+    - Assert true: "dumbyaml.load('x: +3.5') == {'x': '+3.5', }"
+    - Assert true: "dumbyaml.load('x: 0') == {'x': '0', }"
+    - Assert true: "yaml.load('x: 3.5') == {'x': 3.5, }"
+    - Assert true: "yaml.load('x: 0') == {'x': 0, }"
+
+- name: No implicit bools
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - no-implicit
+    - bools
+    - py{{ python_version }}
+  scenario:
+    - Assert true: "dumbyaml.load('x: yes') == {'x': 'yes', }"
+    - Assert true: "dumbyaml.load('x: NO') == {'x': 'NO', }"
+    - Assert true: "dumbyaml.load('x: false') == {'x': 'false', }"
+    - Assert true: "yaml.load('x: yes') == {'x': True, }"
+    - Assert true: "yaml.load('x: false') == {'x': False, }"
+
+- name: No implicit nulls
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - no-implicit
+    - nulls
+    - py{{ python_version }}
+  scenario:
+    - Assert true: "dumbyaml.load('x:') == {'x': '', }"
+    - Assert true: "dumbyaml.load('x: null') == {'x': 'null', }"
+    - Assert true: "yaml.load('x:') == {'x': None, }"
+    - Assert true: "yaml.load('x: null') == {'x': None, }"
+
+- name: Tag token disallowed
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - tag-token
+    - disallowed
+    - py{{ python_version }}
+  scenario:
+    - Python command:
+        command: >
+          dumbyaml.load("""x: !!bool "true"\n""")
+        expect: dumbyaml.TagTokenDisallowed
+    - Assert true: >
+        yaml.load("""x: !!bool "true"\n""") == {"x": True}
+
+- name: Node anchors and references disallowed
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - node-anchors
+    - references
+    - disallowed
+    - py{{ python_version }}
+  scenario:
+    - Python command:
+        command: >
+          dumbyaml.load("x: &x 12\ny: *x\n")
+        expect: dumbyaml.AnchorTokenDisallowed
+    - Python command:
+        command: >
+          assert dumbyaml.load("x: &x\n")
+        expect: dumbyaml.AnchorTokenDisallowed
+    - Assert true: >
+        yaml.load("x: &x 12\ny: *x\n") == {'x': 12, 'y': 12}
+
+
+- name: Flow style disallowed
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - flow-style
+    - disallowed
+    - py{{ python_version }}
+  scenario:
+    - Python command:
+        command: >
+          dumbyaml.load("x: {a: 1, b: 2}")
+        expect: dumbyaml.FlowMappingDisallowed
+    - Assert true: >
+        yaml.load("x: {a: 1, b: 2}") == {"x": {"a": 1, "b": 2}, }
 {% endfor %}
 
 - name: Run flake8
