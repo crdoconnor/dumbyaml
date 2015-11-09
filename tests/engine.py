@@ -27,9 +27,6 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
         )
         self.python_package.build()
 
-        # Silently install flake8
-        check_call([self.python_package.pip, "install", "flake8"], stdout=PIPE)
-
         # Uninstall and reinstall
         call([self.python_package.pip, "uninstall", "dumbyaml", "-y"], stdout=PIPE)
         check_call([self.python_package.python, "setup.py", "install"], stdout=PIPE)
@@ -58,6 +55,8 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
 
 
     def flake8(self, directory):
+        # Silently install flake8
+        check_call([self.python_package.pip, "install", "flake8"], stdout=PIPE)
         try:
             check_call([
                 path.join(self.python_package.bin_directory, "flake8"),
