@@ -1,34 +1,31 @@
 """Dumb YAML Parser"""
 from dumbyaml.dumbloader import DumbLoader
-from yaml.error import YAMLError
+from dumbyaml.yamlnode import YAMLNode
+from dumbyaml import exceptions
 import yaml
 
 
-class DisallowedToken(YAMLError):
-    def __init__(self, token):
-        self.token = token
-
-
-class FlowMappingDisallowed(DisallowedToken):
-    pass
-
-
-class TagTokenDisallowed(DisallowedToken):
-    pass
-
-
-class AnchorTokenDisallowed(DisallowedToken):
-    pass
-
-
-def load(document):
-    """Loads a 'dumb' yaml document."""
+def load(
+    document,
+    allow_flow_style=False,
+    allow_tag_tokens=False,
+    allow_anchor_tokens=False
+):
+    """Return a YAMLItem object representation of a dumb yaml document"""
     for token in yaml.scan(document):
-        if type(token) == yaml.tokens.FlowMappingStartToken:
-            raise FlowMappingDisallowed(token)
-        if type(token) == yaml.tokens.TagToken:
-            raise TagTokenDisallowed(token)
-        if type(token) == yaml.tokens.AnchorToken:
-            raise AnchorTokenDisallowed(token)
+        if type(token) == yaml.tokens.FlowMappingStartToken and \
+           not bool(allow_flow_style):
+                raise exceptions.FlowMappingDisallowed(token)
+        if type(token) == yaml.tokens.TagToken and \
+           not bool(allow_tag_tokens):
+            raise exceptions.TagTokenDisallowed(token)
+        if type(token) == yaml.tokens.AnchorToken and \
+           not bool(allow_anchor_tokens):
+            raise exceptions.AnchorTokenDisallowed(token)
 
-    return yaml.load(document, Loader=DumbLoader)
+    return YAMLNode(yaml.load(document, Loader=DumbLoader))
+
+
+def dump(data):
+    """Return a YAML document."""
+    return yaml.dump(data, default_flow_style=False)

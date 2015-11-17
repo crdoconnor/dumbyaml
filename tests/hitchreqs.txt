@@ -3,6 +3,7 @@ colorama==0.3.3
 decorator==4.0.4
 docopt==0.6.2
 faketime==0.9.6.3
+hitchcli==0.2.6
 hitchpython==0.5.0
 hitchquickstart==0.1.4
 hitchserve==0.4.6

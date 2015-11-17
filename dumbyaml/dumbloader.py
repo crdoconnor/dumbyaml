@@ -1,3 +1,4 @@
+"""Loader that doesn't do implicit typing."""
 from yaml.reader import Reader
 from yaml.scanner import Scanner
 from yaml.parser import Parser

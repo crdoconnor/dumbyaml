@@ -1,0 +1,52 @@
+{% for python_version in python_versions %}
+- name: Invalid type conversion on dict
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - invalid-type-conversion
+    - from-dict
+    - to-float
+    - to-bool
+    - to-int
+    - py{{ python_version }}
+  scenario:
+    - Python command:
+        command: >
+          float(dumbyaml.load('x: 3.4'))
+        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+    - Python command:
+        command: >
+          bool(dumbyaml.load('x: 3.4'))
+        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+    - Python command:
+        command: >
+          str(dumbyaml.load('- 3.4\n- number'))
+        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+    - Python command:
+        command: >
+          bool(dumbyaml.load('- 3.4\n- number')[0])
+        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+
+#- name: No implicit bools
+  #preconditions:
+    #python_version: {{ python_version }}
+  #tags:
+    #- no-implicit
+    #- bools
+    #- py{{ python_version }}
+  #scenario:
+    #- Assert true: "bool(dumbyaml.load('x: yes')['x']) == True"
+    #- Assert true: "bool(dumbyaml.load('x: NO')['x']) == False"
+    #- Assert true: "bool(dumbyaml.load('x: false')['x']) == False"
+
+#- name: No implicit nulls
+  #preconditions:
+    #python_version: {{ python_version }}
+  #tags:
+    #- no-implicit
+    #- nulls
+    #- py{{ python_version }}
+  #scenario:
+    #- Assert true: "str(dumbyaml.load('x:')['x']) == ''"
+    #- Assert true: "str(dumbyaml.load('x: null')['x']) == 'null'"
+{% endfor %}

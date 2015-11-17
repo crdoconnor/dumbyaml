@@ -46,9 +46,9 @@ No implicit typing also means extra code is required to explicitly convert YAML 
     Code: 3
     Element: yes
   """
-  >>> int(yaml.load(document)[0]['Nitrogen']['Code'])
+  >>> int(dumbyaml.load(document)['Nitrogen']['Code'])
   3
-  >>> yaml.load(document)[0]['Nitrogen']['Element'].lower() in ("y", "yes", "true", )
+  >>> bool(dumbyaml.load(document)['Nitrogen']['Element'])
   True
 
 No flow style means that the syntax is simpler, easier to read and the { and } are less likely to

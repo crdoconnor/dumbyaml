@@ -1,0 +1,51 @@
+{% for python_version in python_versions %}
+
+- name: Tag token disallowed
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - tag-token
+    - disallowed
+    - py{{ python_version }}
+  scenario:
+    - Python command:
+        command: >
+          dumbyaml.load("""x: !!bool "true"\n""")
+        expect: dumbyaml.exceptions.TagTokenDisallowed
+    - Assert true: >
+        yaml.load("""x: !!bool "true"\n""") == {"x": True}
+
+- name: Node anchors and references disallowed
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - node-anchors
+    - references
+    - disallowed
+    - py{{ python_version }}
+  scenario:
+    - Python command:
+        command: >
+          dumbyaml.load("x: &x 12\ny: *x\n")
+        expect: dumbyaml.exceptions.AnchorTokenDisallowed
+    - Python command:
+        command: >
+          assert dumbyaml.load("x: &x\n")
+        expect: dumbyaml.exceptions.AnchorTokenDisallowed
+    - Assert true: >
+        yaml.load("x: &x 12\ny: *x\n") == {'x': 12, 'y': 12}
+
+
+- name: Flow style disallowed
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - flow-style
+    - disallowed
+    - py{{ python_version }}
+  scenario:
+    - Python command:
+        command: >
+          dumbyaml.load("x: {a: 1, b: 2}")
+        expect: dumbyaml.exceptions.FlowMappingDisallowed
+{% endfor %}

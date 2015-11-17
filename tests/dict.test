@@ -1,0 +1,13 @@
+{% for python_version in python_versions %}
+- name: Dict
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - dict
+    - py{{ python_version }}
+  scenario:
+    - Assert true: "float(dumbyaml.load('x: 3.5')['x']) == 3.5"
+    - Assert true: "float(dumbyaml.load('x: 3.5').get('x')) == 3.5"
+    - Assert true: "dumbyaml.load('x: 3.5').get('y') is None"
+    - Assert true: "float(dumbyaml.load('x: 3.5').get('y', 4.5)) == 4.5"
+{% endfor %}

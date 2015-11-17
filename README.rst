@@ -1,11 +1,34 @@
 Dumb YAML
 =========
 
-Dumb YAML is a a restricted YAML parser for python with an emphasis
-on cutting out the "smart" features that can cause surprise and
-inhibit readability.
+Dumb YAML is a restricted YAML parser that removes the 'smart' features
+and relacing YAML's weak implicit typing with strong explicit typing.
 
-* Everything parsed as a string, list or dict. There's no implicit typing. yes == "yes" != True.
+It mostly has the same API as pyyaml.
+
+Examples::
+
+    >>> str(yaml.load("x: yes")['x'])
+    True
+    >>> str(dumbyaml.load("x: yes")['x'])
+    "yes"
+    
+    >>> bool(yaml.load("x: yes")['x'])
+    True
+    >>> bool(dumbyaml.load("x: yes")['x'])
+    True
+    
+    >>> int(yaml.load("x: yes")['x'])
+    1
+    >>> int(dumbyaml.load("x: yes")['x'])
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      File "yamlnode.py", line 153, in __int__
+        raise InvalidYAMLTypeConversion(self.item.__repr__(), "int")
+    dumbyaml.exceptions.InvalidYAMLTypeConversion: Conversion not possible of 'yes' to int
+
+The disallowed features which inhibit readability are:
+
 * JSONesque flow style YAML ( x: { a: 1, b: 2 } ) is explicitly disallowed.
 * Typing tag tokens (!!bool / !!str / !!float) are explicitly disallowed.
 * Node anchors and references are explicitly disallowed.
@@ -45,8 +68,7 @@ Disallowed features raise an exception inheriting from YAMLError (the default py
 
 You will need to add explicit type conversions in your code. E.g.::
 
-    is_it_null = None if yamlresult['isnull'].lower() == "null" else yamlresult['isnull']
-    answer_to_question = yamlresult['answer'].lower() in ("yes", "y", "true")
+    answer_to_question = bool(yamlresult['answer'])
     number_of_twinkies = int(yamlresult['Number of twinkies'])
     cost_of_space_station = float(yamlresult['Cost of space station'])
 
@@ -62,7 +84,8 @@ It's a fantastic language for encoding configuration data, or,
 indeed, declarative data of any kind.
 
 However, the "smarter" features are often confusing and make
-YAML both scary for non-programmers and ugly for programmers.
+YAML both scary for non-programmers and ugly for programmers and its
+weak implicit typing is confusing.
 
 As Tim Berners Lee said::
 
@@ -79,44 +102,6 @@ And, as Tim Peters said in the Zen of Python::
     There should be one-- and preferably only one --obvious way to do it.
 
 
-What do I substitute for those features if I was already using them?
---------------------------------------------------------------------
-
-* The implicit type conversions can be replaced by explicit type conversions in your code.
-* Flow style can be replaced by block style.
-* Node anchors that made your YAML DRY can be replaced by a templating language like jinja2.
-* Binary encoding (!!binary) can be replaced by base64 and an explicit type conversion.
-
-
-Removing implicit typing is great but what YAML really needs is *stronger* typing
----------------------------------------------------------------------------------
-
-That's what `pykwalify <https://github.com/Grokzen/pykwalify/>`_ is for.
-
-
-This is why you should use XML/JSON/TOML/INI/etc. instead!
-----------------------------------------------------------
-
-Since cleanliness and readability are somewhat a matter of opinion
-and the after-effects of choosing a markup language is not always
-clear up front, objective side by side comparisons are probably
-the best way of letting people make the right choice.
-
-If you feel tempted to start a flamewar over your favorite
-markup language, please channel your anger into creating
-a side by side comparison, forking this repo and issuing a
-pull request. Thanks!
-
-Rules:
-
-* Put the differentiating features at the top.
-* Present the trade offs as objectively as you can.
-* Side by side comparisons must represent the same data.
-
-Comparisons:
-
-* Regular YAML_
-
 Hacking
 -------
 
@@ -125,8 +110,6 @@ If you want to hack, you can TDD with::
   sudo pip install hitch
   cd dumbyaml/tests
   hitch init
-  hitch test run.test
-
-The py.test unit tests are in dumbyaml/unittests.
+  hitch test *.test
 
 .. _YAML: comparisons/YAML.rst

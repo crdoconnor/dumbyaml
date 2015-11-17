@@ -1,0 +1,41 @@
+{% for python_version in python_versions %}
+- name: YAMLItem equality comparison
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - comparison
+    - equality
+    - py{{ python_version }}
+  scenario:
+    - assert true: >
+        dumbyaml.load("a: true")['a'] == "true"
+    - assert true: >
+        dumbyaml.load("a: true")['a'] == True
+    - python command:
+        command: >
+          dumbyaml.load("a: true")['a'] == 1
+        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+
+
+- name: YAMLItem less than and greater than comparison
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - comparison
+    - lessthan
+    - greaterthan
+    - py{{ python_version }}
+  scenario:
+    - assert true: >
+        dumbyaml.load("a: 5.3")['a'] < 5.6
+    - assert true: >
+        dumbyaml.load("a: 4")['a'] > 3
+    - python command:
+        command: >
+          dumbyaml.load("a: 5.3")['a'] > 4
+        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+    - python command:
+        command: >
+          dumbyaml.load("a: true")['a'] > 1
+        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+{% endfor %}

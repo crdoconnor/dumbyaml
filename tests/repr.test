@@ -1,0 +1,16 @@
+{% for python_version in python_versions %}
+- name: Repr YAMLItem
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - dump
+    - py{{ python_version }}
+  scenario:
+    - assert true: |
+        dumbyaml.load("- 1\n- 2").__repr__() == '[\'1\', \'2\']'
+    - assert true: >
+        dumbyaml.load("x:\n  a: 1\n  b: 2").__repr__() == '{\'x\': {\'b\': 2, \'a\': 1}}' 
+        or dumbyaml.load("x:\n  a: 1\n  b: 2").__repr__() == '{\'x\': {\'a\': 1, \'b\': 2}}' 
+    - assert true: |
+        dumbyaml.load("x: 1").__repr__() == '{\'x\': 1}'
+{% endfor %}
