@@ -27,17 +27,30 @@ Examples::
         raise InvalidYAMLTypeConversion(self.item.__repr__(), "int")
     dumbyaml.exceptions.InvalidYAMLTypeConversion: Conversion not possible of 'yes' to int
 
-The disallowed features which inhibit readability are:
+The disallowed YAML features which inhibit readability are:
 
-* JSONesque flow style YAML ( x: { a: 1, b: 2 } ) is explicitly disallowed.
-* Typing tag tokens (!!bool / !!str / !!float) are explicitly disallowed.
-* Node anchors and references are explicitly disallowed.
+* JSONesque flow style YAML ( x: { a: 1, b: 2 } ) is explicitly disallowed::
 
-See YAML_ for a more direct comparison with regular YAML.
+  x: { a: 1, b: 2 }
+
+* Tag tokens (!!bool / !!str / !!float) are explicitly disallowed::
+
+  x: !!str yes
+
+* Node anchors and references are explicitly disallowed::
+
+  a: &node1
+      t: 1
+      r: 1
+  b: *node1
+  
+Using any of these will raise an exception.
 
 DumbYAML was built for use with the
 `hitch testing framework's <https://hitchtest.com/>`_
 `test description language <https://hitchtest.readthedocs.org/en/latest/glossary/hitch_test_description_language.html>`_.
+
+(It is not currently used yet though).
 
 Tested on Python 2.6.6, 2.7.10, 3.2.1 and 3.5.0
 
@@ -101,6 +114,9 @@ And, as Tim Peters said in the Zen of Python::
     Readability counts.
     There should be one-- and preferably only one --obvious way to do it.
 
+More about less powerful languages:
+
+* `We need less powerful languages by Luke Plant <http://lukeplant.me.uk/blog/posts/less-powerful-languages/>`_
 
 Hacking
 -------
