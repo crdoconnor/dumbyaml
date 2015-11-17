@@ -15,7 +15,7 @@ def read(*parts):
 
 
 setup(name="dumbyaml",
-      version="0.9",
+      version="0.9.1",
       description="A YAML parser that reads only a restricted version of YAML.",
       long_description=read('README.rst'),
       classifiers=[
