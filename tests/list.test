@@ -1,0 +1,11 @@
+{% for python_version in python_versions %}
+- name: Dict
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - list
+    - py{{ python_version }}
+  scenario:
+    - Assert true: "list(dumbyaml.load('- a\\n- b')) == ['a', 'b', ]"
+    - Assert true: "len(dumbyaml.load('- a\\n- b')) == 2"
+{% endfor %}

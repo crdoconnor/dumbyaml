@@ -87,6 +87,15 @@ class YAMLNode(object):
                 self.item.__repr__(), "list or dict"
             )
 
+    def __len__(self):
+        """If YAML node is a dict or list, return its length."""
+        if isinstance(self.item, dict) or isinstance(self.item, list):
+            return len(self.item)
+        else:
+            raise InvalidYAMLTypeConversion(
+                self.item.__repr__(), "list or dict"
+            )
+
     def get(self, key, default=None):
         """If YAML node is a dict, return item via its index."""
         if isinstance(self.item, dict):
