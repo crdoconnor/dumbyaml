@@ -116,6 +116,7 @@ And, as Tim Peters said in the Zen of Python::
 
 More about less powerful languages:
 
+* `The Principle of Least Power by Jeff Atwood <https://blog.codinghorror.com/the-principle-of-least-power/>``_
 * `We need less powerful languages by Luke Plant <http://lukeplant.me.uk/blog/posts/less-powerful-languages/>`_
 
 Hacking
