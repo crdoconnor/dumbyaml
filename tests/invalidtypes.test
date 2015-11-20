@@ -10,43 +10,21 @@
     - to-int
     - py{{ python_version }}
   scenario:
-    - Python command:
+    - assert exception:
         command: >
           float(dumbyaml.load('x: 3.4'))
-        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
-    - Python command:
+        exception: InvalidYAMLTypeConversion
+    - assert exception:
         command: >
           bool(dumbyaml.load('x: 3.4'))
-        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
-    - Python command:
+        exception: InvalidYAMLTypeConversion
+    - assert exception:
         command: >
           str(dumbyaml.load('- 3.4\n- number'))
-        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
-    - Python command:
+        exception: InvalidYAMLTypeConversion
+    - assert exception:
         command: >
           bool(dumbyaml.load('- 3.4\n- number')[0])
-        expect: dumbyaml.exceptions.InvalidYAMLTypeConversion
+        exception: InvalidYAMLTypeConversion
 
-#- name: No implicit bools
-  #preconditions:
-    #python_version: {{ python_version }}
-  #tags:
-    #- no-implicit
-    #- bools
-    #- py{{ python_version }}
-  #scenario:
-    #- Assert true: "bool(dumbyaml.load('x: yes')['x']) == True"
-    #- Assert true: "bool(dumbyaml.load('x: NO')['x']) == False"
-    #- Assert true: "bool(dumbyaml.load('x: false')['x']) == False"
-
-#- name: No implicit nulls
-  #preconditions:
-    #python_version: {{ python_version }}
-  #tags:
-    #- no-implicit
-    #- nulls
-    #- py{{ python_version }}
-  #scenario:
-    #- Assert true: "str(dumbyaml.load('x:')['x']) == ''"
-    #- Assert true: "str(dumbyaml.load('x: null')['x']) == 'null'"
 {% endfor %}

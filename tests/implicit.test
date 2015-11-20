@@ -51,12 +51,12 @@
   scenario:
     - Assert true: |
         str(dumbyaml.load('- 0\n- 1')[1]) == '1'
-    - Python command:
+    - assert exception:
         command: >
           str(dumbyaml.load('- 0\n- 1')[2])
-        expect: IndexError
-    - Python command:
+        exception: TypeError
+    - assert exception:
         command: >
           str(dumbyaml.load('- 0\n- 1')['x'])
-        expect: IndexError
+        exception: TypeError
 {% endfor %}

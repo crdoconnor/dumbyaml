@@ -9,8 +9,8 @@
     - assert true: |
         dumbyaml.load("- 1\n- 2").__repr__() == '[\'1\', \'2\']'
     - assert true: >
-        dumbyaml.load("x:\n  a: 1\n  b: 2").__repr__() == '{\'x\': {\'b\': 2, \'a\': 1}}' 
-        or dumbyaml.load("x:\n  a: 1\n  b: 2").__repr__() == '{\'x\': {\'a\': 1, \'b\': 2}}' 
+        dumbyaml.load("x:\n  a: 1\n  b: 2").__repr__() == '{\'x\': {\'b\': \'2\', \'a\': \'1\'}}' 
+        or dumbyaml.load("x:\n  a: 1\n  b: 2").__repr__() == '{\'x\': {\'a\': \'1\', \'b\': \'2\'}}' 
     - assert true: |
-        dumbyaml.load("x: 1").__repr__() == '{\'x\': 1}'
+        dumbyaml.load("x: 1").__repr__() == '{\'x\': \'1\'}'
 {% endfor %}

@@ -6,6 +6,6 @@
     - dump
     - py{{ python_version }}
   scenario:
-    - Assert true: >
+    - assert true: >
         dumbyaml.dump({'a': 3.5, 'b': False, 'c': 'text'}) == 'a: 3.5\nb: false\nc: text\n'
 {% endfor %}

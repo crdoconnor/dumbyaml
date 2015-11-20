@@ -8,11 +8,11 @@
     - disallowed
     - py{{ python_version }}
   scenario:
-    - Python command:
+    - assert exception::
         command: >
           dumbyaml.load("""x: !!bool "true"\n""")
-        expect: dumbyaml.exceptions.TagTokenDisallowed
-    - Assert true: >
+        exception: TagTokenDisallowed
+    - assert true: >
         yaml.load("""x: !!bool "true"\n""") == {"x": True}
 
 - name: Node anchors and references disallowed
@@ -24,15 +24,15 @@
     - disallowed
     - py{{ python_version }}
   scenario:
-    - Python command:
+    - assert exception:
         command: >
           dumbyaml.load("x: &x 12\ny: *x\n")
-        expect: dumbyaml.exceptions.AnchorTokenDisallowed
-    - Python command:
+        exception: AnchorTokenDisallowed
+    - assert exception:
         command: >
           assert dumbyaml.load("x: &x\n")
-        expect: dumbyaml.exceptions.AnchorTokenDisallowed
-    - Assert true: >
+        exception: AnchorTokenDisallowed
+    - assert true: >
         yaml.load("x: &x 12\ny: *x\n") == {'x': 12, 'y': 12}
 
 
@@ -44,8 +44,8 @@
     - disallowed
     - py{{ python_version }}
   scenario:
-    - Python command:
+    - assert exception:
         command: >
           dumbyaml.load("x: {a: 1, b: 2}")
-        expect: dumbyaml.exceptions.FlowMappingDisallowed
+        exception: FlowMappingDisallowed
 {% endfor %}

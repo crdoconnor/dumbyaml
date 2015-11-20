@@ -4,7 +4,8 @@ Dumb YAML
 Dumb YAML is a restricted YAML parser that removes the 'smart' features
 and relacing YAML's weak implicit typing with strong explicit typing.
 
-It mostly has the same API as pyyaml.
+It mostly has the same API as pyyaml. All dumbyaml exceptions inherit
+from pyyaml's YAMLError object.
 
 Examples::
 
@@ -27,24 +28,26 @@ Examples::
         raise InvalidYAMLTypeConversion(self.item.__repr__(), "int")
     dumbyaml.exceptions.InvalidYAMLTypeConversion: Conversion not possible of 'yes' to int
 
-The disallowed YAML features which inhibit readability are:
+The disallowed 'too smart for their own good' YAML features are:
 
-* JSONesque flow style YAML ( x: { a: 1, b: 2 } ) is explicitly disallowed::
+* JSONesque flow style::
 
   x: { a: 1, b: 2 }
 
-* Tag tokens (!!bool / !!str / !!float) are explicitly disallowed::
+* Tag tokens::
 
   x: !!str yes
+  y: !!float 3.5
+  z: !!bool yes
 
-* Node anchors and references are explicitly disallowed::
+* Node anchors and references::
 
   a: &node1
       t: 1
       r: 1
   b: *node1
   
-Using any of these will raise an exception.
+Using any of these will raise a DisallowedToken exception.
 
 DumbYAML was built for use with the
 `hitch testing framework's <https://hitchtest.com/>`_
@@ -52,7 +55,7 @@ DumbYAML was built for use with the
 
 (It is not currently used yet though).
 
-Tested on Python 2.6.6, 2.7.10, 3.2.1 and 3.5.0
+Tested on Python 2.6.6, 2.7.10, 3.3.0 and 3.5.0
 
 
 Usage
