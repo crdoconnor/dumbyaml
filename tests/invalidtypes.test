@@ -27,4 +27,21 @@
           bool(dumbyaml.load('- 3.4\n- number')[0])
         exception: InvalidYAMLTypeConversion
 
+        
+- name: Invalid list operations on string
+  description: |
+    List operations are prohibited on strings to prevent
+    confusion with lists.
+  preconditions:
+    python_version: {{ python_version }}
+  tags:
+    - invalid-type-conversion
+    - string
+    - list-operations
+    - py{{ python_version }}
+  scenario:
+    - assert exception:
+        command: >
+          dumbyaml.load('- 3.4\n- number')[0][0]
+        exception: InvalidYAMLTypeConversion
 {% endfor %}
