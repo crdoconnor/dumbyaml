@@ -24,11 +24,12 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
         # Uninstall and reinstall
         call([self.python_package.pip, "install", "ipython==1.2.1", ], stdout=PIPE)
         call([self.python_package.pip, "install", "pyzmq", ], stdout=PIPE)
+        call([self.python_package.pip, "install", "flake8", ], stdout=PIPE)
         call([self.python_package.pip, "uninstall", "dumbyaml", "-y"], stdout=PIPE)
-        chdir(PROJECT_DIRECTORY)
-        check_call([self.python_package.python, "setup.py", "install"], stdout=PIPE)
+        #chdir(PROJECT_DIRECTORY)
+        #check_call([self.python_package.python, "setup.py", "install"], stdout=PIPE)
         
-        #run(Command([self.python_package.python, "setup.py", "install"]).in_dir(PROJECT_DIRECTORY))
+        run(Command([self.python_package.python, "setup.py", "install"]).in_dir(PROJECT_DIRECTORY))
         #print(Command([self.python_package.python, "setup.py", "install"]).arguments)
 
 
@@ -81,7 +82,7 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
 
     def flake8(self, directory):
         # Silently install flake8
-        check_call([self.python_package.pip, "install", "flake8"], stdout=PIPE)
+        chdir(PROJECT_DIRECTORY)
         try:
             check_call([
                 path.join(self.python_package.bin_directory, "flake8"),
@@ -91,6 +92,7 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
             raise RuntimeError("flake8 failure")
 
     def run_unit_tests(self, directory):
+        chdir(PROJECT_DIRECTORY)
         try:
             check_call([
                 path.join(self.python_package.bin_directory, "py.test"),

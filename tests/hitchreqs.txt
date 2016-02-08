@@ -1,6 +1,6 @@
 click==6.2
 colorama==0.3.6
-commandlib==0.1.1
+commandlib==0.1.2
 decorator==4.0.9
 docopt==0.6.2
 faketime==0.9.6.3
